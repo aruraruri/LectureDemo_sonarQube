@@ -1,7 +1,9 @@
 pipeline {
     agent any
 
-
+    tools {
+     maven 'MAVEN_HOME'
+    }
 
     environment {
         SONARQUBE_SERVER = 'SonarQubeServer'  // SonarQube server name in Jenkins config
