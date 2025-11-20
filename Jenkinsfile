@@ -1,17 +1,6 @@
 pipeline {
     agent any
 
-     environment {
-                    PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
-
-                    // Define Docker Hub credentials ID
-                    DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
-                    // Define Docker Hub repository name
-                    DOCKERHUB_REPO = 'aruraruri/sonar_calculator'
-                    // Define Docker image tag
-                    DOCKER_IMAGE_TAG = 'latest'
-                }
-
     tools {
      maven 'MAVEN_HOME'
     }
@@ -19,6 +8,15 @@ pipeline {
     environment {
         SONARQUBE_SERVER = 'SonarQubeServer'  // SonarQube server name in Jenkins config
         SONAR_TOKEN = 'sqa_e4cef5513e99fd1196f1f7053dac7ababb620c2b'
+
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+
+        // Define Docker Hub credentials ID
+        DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
+        // Define Docker Hub repository name
+        DOCKERHUB_REPO = 'aruraruri/sonar_calculator'
+        // Define Docker image tag
+        DOCKER_IMAGE_TAG = 'latest'
     }
 
     stages {
