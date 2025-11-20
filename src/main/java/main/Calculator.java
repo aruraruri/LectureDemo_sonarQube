@@ -1,8 +1,5 @@
 package main;
 
-import java.util.Scanner;
-import java.util.logging.Logger;
-
 public class Calculator {
 
     private Calculator() {
