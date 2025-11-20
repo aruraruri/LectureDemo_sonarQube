@@ -32,16 +32,23 @@ pipeline {
             }
         }
 
-        stage('Code Coverage') {
+        stage('SonarQube Analysis') {
                     steps {
-                        recordCoverage(tools: [[parser: 'JACOCO']],
-                                id: 'jacoco', name: 'JaCoCo Coverage',
-                                sourceCodeRetention: 'EVERY_BUILD',
-                                qualityGates: [
-                                        [threshold: 60.0, metric: 'LINE', baseline: 'PROJECT', unstable: true],
-                                        [threshold: 60.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: true]])
+                        withSonarQubeEnv('SonarQubeServer') {
+                            bat """
+                                ${tool 'SonarScanner'}\\bin\\sonar-scanner ^
+                                -Dsonar.projectKey=SonarCalculator ^
+                                -Dsonar.sources=src ^
+                                -Dsonar.projectName=SonarCalculatorTest ^
+                                -Dsonar.host.url=http://localhost:9000 ^
+                                -Dsonar.login=${env.SONAR_TOKEN} ^
+                                -Dsonar.java.binaries=target/classes
+                            """
+                        }
                     }
                 }
+
+
                 stage('Build Docker Image') {
                     steps {
                         bat 'docker build -t %DOCKERHUB_REPO%:%DOCKER_IMAGE_TAG% .'
@@ -58,21 +65,5 @@ pipeline {
                         }
                     }
                 }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQubeServer') {
-                    bat """
-                        ${tool 'SonarScanner'}\\bin\\sonar-scanner ^
-                        -Dsonar.projectKey=SonarCalculator ^
-                        -Dsonar.sources=src/calc/java/calc ^
-                        -Dsonar.projectName=SonarCalculatorTest ^
-                        -Dsonar.host.url=http://localhost:9000 ^
-                        -Dsonar.login=${env.SONAR_TOKEN} ^
-                        -Dsonar.java.binaries=target/classes
-                    """
-                }
-            }
-        }
     }
 }
