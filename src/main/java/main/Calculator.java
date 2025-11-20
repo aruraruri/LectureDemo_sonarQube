@@ -19,7 +19,8 @@ public class Calculator {
         double num2 = sc.nextDouble();
 
         double result = addValues(num1, num2);
-        logger.info("Result is "+result);
+        String resultStr = "Result is "+result;
+        logger.info(resultStr);
     }
     public static double addValues(double num1, double num2) {
         return num1 + num2;
